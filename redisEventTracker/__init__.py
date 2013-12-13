@@ -50,7 +50,8 @@ class EventTracker(Singleton):
         try:
             f = open( self._log_file_name, 'at') if self._log_file_name else sys.stderr
             f.write( message)
-            f.close()
+            if self._log_file_name:
+                f.close()
 
         except Exception as e:
             warnings.warn( unicode(e))

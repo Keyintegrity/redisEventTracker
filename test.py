@@ -8,5 +8,6 @@ et = EventTracker( host='localhost', port=63790, db=0)
 
 et.track_event('nonexistent')
 
+et.track_event('unknown')
 
 
