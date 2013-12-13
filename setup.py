@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
 
 from setuptools import setup, find_packages
+try:
+  readme = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
+except:
+  readme = ''
 
 setup(
     name='redis-event-tracker',
-    version='0.0.1',
+    version='0.0.7',
     packages=find_packages(),
     requires=['redis (>= 2.7.6)'],
     description='Track your events in redis',
-    long_description=open('README.md').read(),
+    long_description=readme,
     author='Keyintegrity',
     author_email='info@keyintegrity.com',
     maintainer='Aleksey Pivovarov',
@@ -19,7 +24,7 @@ setup(
     license='MIT License',
     keywords='redis events track',
     classifiers=[
-        'Development Status :: 1 - Beta',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Environment :: Web Environment',
         'Operating System :: OS Independent',
