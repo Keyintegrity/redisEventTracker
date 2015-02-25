@@ -3,8 +3,12 @@
 from redis import StrictRedis
 from redis.exceptions import RedisError
 from datetime import datetime
-import sys
 import warnings
+import logging
+
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class Singleton(object):
@@ -18,21 +22,16 @@ class Singleton(object):
 
 class EventTracker(Singleton):
     _redis = None
-    _log_file_name = None
 
-    def __init__(self, redis=None, host='localhost', port=6379, db=0, log=None):
-        self.set_connection_to_redis( redis or self.get_connection_to_redis(host=host, port=port, db=db))
-        self._log_file_name = log
-
+    def __init__(self, redis=None, host='localhost', port=6379, db=0):
+        self.set_connection_to_redis(redis or self.get_connection_to_redis(host=host, port=port, db=db))
 
     @staticmethod
     def get_connection_to_redis(**kwargs):
         return StrictRedis(**kwargs)
 
-
     def set_connection_to_redis(self, redis):
         self._redis = redis
-
 
     def track_event(self, event_hash_name):
         date = datetime.now().date()
@@ -42,17 +41,5 @@ class EventTracker(Singleton):
             self._redis.hincrby(event_hash_name, date, 1)
 
         except RedisError as e:
-            warnings.warn( unicode(e))
-            self.write_to_log(u'%s: %s: %s\n' % (datetime.now().strftime('%Y-%m-%d %H:%M:%S'), unicode(e), event_hash_name))
-
-
-    def write_to_log(self, message):
-        try:
-            f = open( self._log_file_name, 'at') if self._log_file_name else sys.stderr
-            f.write( message)
-            if self._log_file_name:
-                f.close()
-
-        except Exception as e:
-            warnings.warn( unicode(e))
-
+            warnings.warn(unicode(e))
+            logger.warning(u'{0}; event: {1}'.format(unicode(e), event_hash_name))
