@@ -22,7 +22,9 @@ API Reference
 -------------
 
 * **track_event()**: Method track_event() increases a counter for a given event name in the today's record.
+
 If there were errors, they are logged into a log file.
+
 
 Release Notes
 -------------
