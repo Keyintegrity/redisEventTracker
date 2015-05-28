@@ -10,7 +10,7 @@ except:
 
 setup(
     name='redis-event-tracker',
-    version='0.0.9',
+    version='0.1.0',
     packages=find_packages(),
     requires=['redis (>= 2.7.6)'],
     description='Track your events in redis',
