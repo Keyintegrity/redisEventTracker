@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 from redis import StrictRedis
-from redis.exceptions import RedisError
 from datetime import datetime
 import warnings
 import logging
