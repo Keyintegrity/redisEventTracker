@@ -33,7 +33,7 @@ class TestConnection(unittest.TestCase):
     def test_logging(self, mocked_logger):
         self.et._redis.sadd = mock.Mock(side_effect=RedisError('Boom!'))
         self.et.track_event('event')
-        self.assertTrue(mocked_logger.warning.called)
+        self.assertTrue(mocked_logger.exception.called)
 
     def test_tracker_param(self):
         self.assertRaises(TypeError, self.et.track_event)

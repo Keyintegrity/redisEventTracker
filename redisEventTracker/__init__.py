@@ -39,9 +39,10 @@ class Singleton(object):
 class EventTracker(Singleton):
     _redis = None
 
-    def __init__(self, redis=None, host='localhost', port=6379, db=0, graphite_host=None, graphite_port=2003,
-                 graphite_prefix=''):
-        self.set_connection_to_redis(redis or self.get_connection_to_redis(host=host, port=port, db=db))
+    def __init__(self, redis=None, host='localhost', port=6379, db=0, connection_pool=None, graphite_host=None,
+                 graphite_port=2003, graphite_prefix=''):
+        self.set_connection_to_redis(redis or self.get_connection_to_redis(host=host, port=port, db=db,
+                                                                           connection_pool=connection_pool))
         self.graphite_host = graphite_host
         self.graphite_port = graphite_port
         self.graphite = None
@@ -70,6 +71,6 @@ class EventTracker(Singleton):
             if self.graphite:
                 self.graphite.send_metric(event_hash_name, total)
 
-        except RedisError as e:
+        except Exception as e:
             warnings.warn(unicode(e))
-            logger.warning(u'{0}; event: {1}'.format(unicode(e), event_hash_name))
+            logger.exception(u'{0}; event: {1}'.format(unicode(e), event_hash_name))
